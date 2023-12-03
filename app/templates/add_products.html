@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <h1>Add New Product</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="input-field">
+            <input type="text" name="name" id="name" required>
+            <label for="name">Product Name</label>
+        </div>
+        <div class="input-field">
+            <textarea name="description" id="description" class="materialize-textarea" required></textarea>
+            <label for="description">Description</label>
+        </div>
+        <div class="input-field">
+            <input type="number" step="0.01" name="price" id="price" required>
+            <label for="price">Price</label>
+        </div>
+        <div class="file-field input-field">
+            <div class="btn">
+                <span>Upload Image</span>
+                <input type="file" name="image" accept="image/*" required>
+            </div>
+            <div class="file-path-wrapper">
+                <input class="file-path validate" type="text">
+            </div>
+        </div>
+        <button class="btn waves-effect waves-light" type="submit">Add Product</button>
+    </form>
+</div>
+{% endblock content %}

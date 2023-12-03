@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Now You Are a Seller</h1>
+
+<div class="row">
+  <div class="col s6">
+    <a href="{{ url_for('add_products') }}" class="waves-effect waves-light btn">Add Product</a>
+  </div>
+  <div class="col s6">
+    <a href="{{ url_for('edit_products') }}" class="waves-effect waves-light btn">Edit Products</a>
+  </div>
+</div>
+
+{% endblock content %}

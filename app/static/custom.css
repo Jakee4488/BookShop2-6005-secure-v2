@@ -1,0 +1,128 @@
+.collection .collection-item.avatar .title{
+    font-weight: bold;
+    color: black;
+}
+.collection .collection-item.avatar .title{
+    font-weight: bold;
+    color: black;
+}
+.rating {
+    direction: rtl; /* Left to right */
+  }
+  
+  .rating input {
+    display: none; /* Hide the actual radio button */
+  }
+  
+  .rating label {
+    color: #ccc; /* Default star color */
+    font-size: 36px; /* Increased size of the stars */
+    padding: 0;
+    cursor: pointer;
+  }
+  
+  .rating label:hover,
+  .rating label:hover ~ label,
+  .rating input:checked ~ label {
+    color: #FFD700; /* Golden yellow color for filled stars */
+  }
+  * Reset some default styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Style for tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+table th,
+table td {
+    padding: 10px;
+    text-align: left;
+}
+
+table th {
+    background-color: #f2f2f2;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+table tr:nth-child(even) {
+    background-color: #f5f5f5;
+}
+
+/* Style for buttons */
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+
+/* Style for flash messages */
+.flash {
+    color: #d9534f;
+    background-color: #f2dede;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    table {
+        font-size: 14px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+}
+.nav-wrapper {
+    position: relative;
+}
+
+.nav-wrapper .input-field {
+    margin: 0; /* Adjust margin as needed */
+}
+
+.nav-wrapper input[type="search"] {
+    width: calc(100% - 100px); /* Adjust the width of the search input */
+    padding: 10px; /* Adjust padding as needed */
+    padding-left: 40px; /* Adjust according to icon width */
+    border: 1px solid #ccc; /* Optional: Add border for search input */
+    border-radius: 4px; /* Optional: Add border-radius for search input */
+}
+
+.input-field input[type=search] {
+    display: block;
+    line-height: inherit;
+    width: inherit;
+    -webkit-transition: .3s background-color;
+    transition: .3s background-color
+}

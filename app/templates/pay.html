@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+<h1>Payment Success</h1>
+
+You have brought some things for {{ cost }}
+
+
+
+{% endblock %}
+

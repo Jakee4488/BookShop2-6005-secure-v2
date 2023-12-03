@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Admin Dashboard</h1>
+    <h2>Database Tables</h2>
+    <ul>
+        {% for table in table_data %}
+        <li>
+            <h3>{{ table['table_name'] }}</h3>
+            <ul>
+                {% for column in table['columns'] %}
+                <li>{{ column }}</li>
+                {% endfor %}
+            </ul>
+            <table>
+                <thead>
+                    <tr>
+                        {% for column in table['columns'] %}
+                        <th>{{ column }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in table['data'] %}
+                    <tr>
+                        {% for column_name, value in row.items() %}
+                        <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

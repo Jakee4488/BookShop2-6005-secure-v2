@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>6005CEM: 2021 CW 2</title>
+    
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="{{ url_for('static' , filename='materialize/css/materialize.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static' , filename='custom.css')}}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static' , filename='markdownEditor/dist/simplemde.min.css')}}">
+    <script src="{{ url_for('static' , filename='markdownEditor/dist/simplemde.min.js')}}"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    
+</head>
+<body>
+    <div class="container">
+        <nav class="nav-extended deep-purple">
+            <div class="nav-wrapper deep-purple darken-4">
+                <!-- Navigation Links -->
+                <ul id="nav-mobile" class="hide-on-med-and-down">
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('products') }}">Products</a></li>
+                </ul>
+                <!-- Search Form -->
+                
+                <!-- User Links -->
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    {% if session["basket"] %}
+                    <li><a href="{{ url_for('basket')}}">Basket</a></li>
+                    {% endif %}
+                    {% if session["user"] %}
+                    <li><a href="{{ url_for('settings', userId=session['user']) }}">Settings</a></li>
+                    {% if session["is_seller"] %}
+                    <li><a href="{{ url_for('seller_dashboard')}}">Seller Account</a></li>
+                            {% if session["admin"] %}
+                            <li><a href="{{ url_for('admin_dashboard')}}">Admin Account</a></li>
+                            {% endif %}
+                    {% else %}
+                    <li><a href="{{ url_for('create_seller')}}">Become a seller</a></li>
+                    {% endif %}
+                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                    {% else %}
+                    <li><a href="{{ url_for('login')}}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            {% block navTabs %}
+            {% endblock navTabs %}
+          
+        </nav>
+        <div class="search-bar">
+          <form action="{{ url_for('products_search') }}" method="get">
+              <div class="input-field">
+                  <input id="search" name="search" type="search" required>
+                  <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+                  <button class="btn waves-effect waves-light" type="submit" name="action">Search</button>
+                  <i class="material-icons">close</i>
+              </div>
+            </form>
+      </div>
+        <!-- Messages and things -->
+        {% include "helpers/flashMessage.html" %}
+        <!-- Main Page Content -->
+        <div class="row">
+            {% block content %}
+            {% endblock content %}
+        </div>
+    </div> <!-- End Container -->
+    <!-- Compiled and minified JavaScript -->
+    <script src="{{ url_for('static' , filename='materialize/js/materialize.min.js')}}"></script>
+    {% block scripts %}
+    {% endblock scripts %}
+</body>
+</html>

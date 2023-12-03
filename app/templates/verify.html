@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>OTP Verification</title>
+</head>
+<body>
+  <div style="text-align: center;">
+    <h1>OTP Verification</h1>
+    <p>OTP has been sent to your email.</p>
+    <form action="{{ url_for('verify') }}" method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div style="margin: 20px;">
+        <label for="otp">Enter OTP:</label><br>
+        <input type="text" id="otp" name="otp" placeholder="Enter OTP" style="padding: 10px;">
+      </div>
+      <button type="submit" style="padding: 10px;">Verify OTP</button>
+    </form>
+  </div>
+</body>
+</html>
+{% endblock content %}

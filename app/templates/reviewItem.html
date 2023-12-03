@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Leave a Comment</h1>
+<p>Please leave a comment for the Item {{ item.name }}</p>
+<img src="{{ url_for('serve_image', name=item.image) }}" alt="" class="circle" width="128">
+
+<form method="POST" enctype="multipart/form-data">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  
+  <div class="row">
+    <div class="input-field col s6">
+      <label>Rating</label>
+      <div class="rating">
+        {% for i in range(5, 0, -1) %}
+        <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}" {% if review.stars == i %} checked {% endif %}/>
+        <label for="star{{ i }}" title="{{ i }} stars">&#9733;</label>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="input-field col s12">
+      <textarea id="textarea1" name="review" class="materialize-textarea" rows="10">{{ review.review }}</textarea>
+      <label for="textarea1">Feedback</label>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="file-field input-field">
+      <div class="btn">
+        <span>Upload Image</span>
+        <input type="file" name="review_image">
+      </div>
+      <div class="file-path-wrapper">
+        <input class="file-path validate" type="text">
+      </div>
+    </div>
+  </div>
+
+  <input type="hidden" name="reviewId" value="{{ review.id }}">    
+  <button class="waves-effect waves-light btn">Submit</button>
+</form>
+
+{% endblock content %}
