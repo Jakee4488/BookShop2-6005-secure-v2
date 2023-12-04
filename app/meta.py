@@ -14,6 +14,7 @@ from markupsafe import escape
 import flask
 from flask import g
 import sqlite3
+from werkzeug.http import HTTP_STATUS_CODES
 import re
 import bcrypt
 from flask import session
@@ -26,6 +27,9 @@ import hashlib
 from flask import Flask
 import string
 import random
+from flask import Flask, jsonify
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 DATABASE = 'database.db'
 
@@ -34,6 +38,7 @@ UPLOAD_FOLDER = r'C:\Users\jacob\Desktop\6005-working-file\BookShop2-6005-secure
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 app = Flask(__name__)
+#
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
@@ -99,6 +104,7 @@ app.config.update(
 )
 from flask_wtf.csrf import CSRFProtect
 csrf = CSRFProtect(app)
+
 
 
 def make_dicts(cursor, row):

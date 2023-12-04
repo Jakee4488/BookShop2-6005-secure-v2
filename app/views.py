@@ -3,6 +3,17 @@ from markupsafe import escape
 import datetime
 
 
+limiter = Limiter(app,default_limits=["200 per day", "50 per hour"])
+
+@app.route('/limited-route')
+@limiter.limit("5 per minute")  # Allow 5 requests per minute
+def limited_route():
+    return jsonify(message="This route is rate-limited.")
+
+@app.errorhandler(429)
+def ratelimit_error(e):
+    return jsonify(error="ratelimit exceeded", message=str(e.description)), 429
+
 
 
 @app.route("/")
