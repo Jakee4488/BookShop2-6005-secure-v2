@@ -5,8 +5,9 @@ import datetime
 
 limiter = Limiter(app,default_limits=["200 per day", "50 per hour"])
 
-@app.route('/limited-route')
-@limiter.limit("5 per minute")  # Allow 5 requests per minute
+# can be implemted any of the page
+@app.route('/limited')
+@limiter.limit("50 per minute") 
 def limited_route():
     return jsonify(message="This route is rate-limited.")
 
