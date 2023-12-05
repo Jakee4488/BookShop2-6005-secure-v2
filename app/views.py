@@ -690,7 +690,7 @@ def add_products():
     if request.method == 'POST':
         # Get product details from the form
         name = request.form.get('name')
-        description = request.form.get('description')
+        description = escape(request.form.get('description'))
         price = request.form.get('price')
         image = request.files.get('image')
 
