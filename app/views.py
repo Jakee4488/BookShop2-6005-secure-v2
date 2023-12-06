@@ -81,48 +81,66 @@ def products_search():
 
         
 @app.route("/admin/dashboard", methods=["GET", "POST"])
+@app.route("/admin/dashboard", methods=["GET", "POST"])
 def admin_dashboard():
+    # Check if the user is an admin and logged in
     if 'admin' not in flask.session:
+        # Display a message and redirect to the login page if not logged in as admin
         flask.flash('Please log in as an admin.')
         return flask.redirect(flask.url_for('login'))
-    flask.session['is_admin'] =True
-    # Connect to the SQLite database
-    conn = sqlite3.connect('database.db')  # Corrected database file path
-    cursor = conn.cursor()
 
-    # Get a list of all tables in the database
-    cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
-    tables = cursor.fetchall()
-    print(tables)  # Print the table names to check if they are fetched correctly
+    # Set a session variable to indicate an admin is logged in
+    flask.session['is_admin'] = True
 
-    table_data = []
-# Iterate over the tables and retrieve column information and data for each
-    for table in tables:
-        table_name = table[0]
+    # Establish a connection to the SQLite database
+    db_connection = sqlite3.connect('database.db')
+    db_cursor = db_connection.cursor()
 
-        # Get column information for the current table
-        cursor.execute(f"PRAGMA table_info({table_name})")
-        columns = cursor.fetchall()
+    # Execute a query to retrieve the names of all tables in the database
+    db_cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
+    # Fetch the results of the query
+    table_names = db_cursor.fetchall()
 
-        # Get data from the current table
-        cursor.execute(f"SELECT * FROM {table_name}")
-        table_data_rows = cursor.fetchall()
+    # Prepare a list to store data for rendering in the template
+    dashboard_data = []
 
-        # Create a list of dictionaries containing column names and data for each row
-        data = []
-        for row in table_data_rows:
-            data.append({columns[i][1]: row[i] for i in range(len(columns))})
+    # Iterate over each table name retrieved from the database
+    for table_entry in table_names:
+        # Extract the table name from the current entry
+        current_table_name = table_entry[0]
 
-        table_data.append({
-            'table_name': table_name,
-            'columns': [column[1] for column in columns],  # Extract column names
-            'data': data,  # Add data for the current table
+        # Retrieve column information for the current table
+        # This includes column names and types
+        db_cursor.execute(f"PRAGMA table_info({current_table_name})")
+        column_info = db_cursor.fetchall()
+
+        # Fetch all rows of data from the current table
+        db_cursor.execute(f"SELECT * FROM {current_table_name}")
+        rows_in_table = db_cursor.fetchall()
+
+        # Initialize a list to store row data in a structured format
+        row_data_list = []
+        # Process each row in the table
+        for row in rows_in_table:
+            # Create a dictionary for each row where column names are keys
+            # and row entries are values
+            row_data_list.append({column_info[i][1]: row[i] for i in range(len(column_info))})
+
+        # Append a dictionary for the current table to the dashboard data
+        # This includes the table name, columns, and row data
+        dashboard_data.append({
+            'table_name': current_table_name,
+            'columns': [column[1] for column in column_info],
+            'data': row_data_list,
         })
 
-    # Close the database connection
-    conn.close()
+    # Close the database connection after data retrieval
+    db_connection.close()
 
-    return flask.render_template("admin.html", table_data=table_data)
+    # Render the 'admin.html' template, passing the dashboard data
+    return flask.render_template("admin.html", table_data=dashboard_data)
+
+
     
     
     
@@ -683,97 +701,110 @@ def allowed_file(filename):
 
 @app.route('/user/add_products', methods=['GET', 'POST'])
 def add_products():
+    # Check if the user is logged in
     if 'user' not in session:
         flask.flash('Please log in to add products.')
         return flask.redirect(flask.url_for('login'))
 
     if request.method == 'POST':
-        # Get product details from the form
-        name = request.form.get('name')
-        description = escape(request.form.get('description'))
-        price = request.form.get('price')
-        image = request.files.get('image')
+        # Retrieve product details from the form
+        product_name = request.form.get('name')
+        product_description = escape(request.form.get('description'))  # Escaping to prevent HTML injection
+        product_price = request.form.get('price')
+        product_image = request.files.get('image')
 
-        # Validate the form data
-        if not name or not description or not price or not image:
+        # Validate the form data to ensure all fields are filled
+        if not product_name or not product_description or not product_price or not product_image:
             flask.flash('Please fill out all fields.')
         else:
-            # Handle the uploaded image (you can save it to a directory)
-            if image:
-                # Save the image to your desired directory
-                image_filename = secure_filename(image.filename)
-                #image.save(os.path.join(image_filename))
-                #image.save = os.path.join[UPLOAD_FOLDER]
-                file_path = os.path.join(app.config["UPLOAD_FOLDER"], image_filename)
+            # Process the uploaded image if it exists
+            if product_image:
+                # Generate a secure filename and create the file path
+                image_filename = secure_filename(product_image.filename)
+                image_save_path = os.path.join(app.config["UPLOAD_FOLDER"], image_filename)
+                
+                # Ensure the upload folder exists, then save the image
                 os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
+                product_image.save(image_save_path)
 
-                image.save(file_path)
-
-                # Insert the new product into the database
-                insert_query = """
+                # SQL query to insert the new product into the database
+                insert_product_query = """
                 INSERT INTO product (name, description, price, image, seller_id)
                 VALUES (?, ?, ?, ?, ?)
                 """
-                seller_id = session['user']
-                write_db(insert_query, [name, description, price, image_filename, seller_id])
+                seller_id = session['user']  # Get the seller's user ID from session
+                write_db(insert_product_query, [product_name, product_description, product_price, image_filename, seller_id])
 
                 flask.flash('Product added successfully.')
+                # Redirect to the edit products page after successful addition
                 return flask.redirect(flask.url_for('edit_products'))
 
+    # Render the add products template if not a POST request
     return flask.render_template('add_products.html')
+
 
 @app.route('/user/edit_products')
 def edit_products():
+    # Check if the user is logged in
     if 'user' not in session:
         flask.flash('Please log in to edit your products.')
         return flask.redirect(flask.url_for('login'))
 
-    user_id = session['user']
+    # Retrieve the ID of the currently logged-in user
+    logged_in_user_id = session['user']
 
-    # Fetch the seller's products from the product table
-    products_query = "SELECT * FROM product WHERE seller_id = ?"
-    products = query_db(products_query, [user_id])
+    # SQL query to fetch all products associated with the logged-in seller
+    fetch_seller_products_query = "SELECT * FROM product WHERE seller_id = ?"
+    seller_products = query_db(fetch_seller_products_query, [logged_in_user_id])
 
-    return flask.render_template('edit_products.html', products=products)
+    # Render the edit_products page with the fetched products
+    return flask.render_template('edit_products.html', products=seller_products)
+
 
 @app.route('/user/edit_products/<int:product_id>', methods=['GET', 'POST'])
 def edit_product(product_id):
+    # Check if user is logged in, redirect to login if not
     if 'user' not in session:
         flask.flash('Please log in to edit your products.')
         return flask.redirect(flask.url_for('login'))
 
-    user_id = session['user']
+    seller_id = session['user']  # Get the logged-in user's ID
 
-    # Fetch the product from the database
-    product_query = "SELECT * FROM product WHERE id = ? AND seller_id = ?"
-    product = query_db(product_query, [product_id, user_id], one=True)
+    # Query to fetch the specific product from the database based on product_id and seller_id
+    product_fetch_query = "SELECT * FROM product WHERE id = ? AND seller_id = ?"
+    current_product = query_db(product_fetch_query, [product_id, seller_id], one=True)
 
-    if not product:
+    # If the product is not found or the user doesn't have permission, redirect to the product list
+    if not current_product:
         flask.flash('Product not found or you do not have permission to edit it.')
         return flask.redirect(flask.url_for('edit_products'))
 
     if request.method == 'POST':
-        # Get updated product details from the form
-        name = request.form.get('name')
-        description = request.form.get('description')
-        price = request.form.get('price')
+        # Retrieve updated product details from the form
+        updated_product_name = request.form.get('name')
+        updated_product_description = request.form.get('description')
+        updated_product_price = request.form.get('price')
 
-        # Validate the form data
-        if not name or not description or not price:
+        # Check if all the form fields are filled
+        if not updated_product_name or not updated_product_description or not updated_product_price:
             flask.flash('Please fill out all fields.')
         else:
-            # Update the product information in the database
-            update_query = """
+            # Query to update the product information in the database
+            product_update_query = """
             UPDATE product
             SET name = ?, description = ?, price = ?
             WHERE id = ? AND seller_id = ?
             """
-            write_db(update_query, [name, description, price, product_id, user_id])
+            # Execute the update query with the new product details
+            write_db(product_update_query, [updated_product_name, updated_product_description, updated_product_price, product_id, seller_id])
 
             flask.flash('Product updated successfully.')
+            # Redirect to the product list page after successful update
             return flask.redirect(flask.url_for('edit_products'))
 
-    return flask.render_template('edit_product.html', product=product)
+    # Render the edit product template with the current product details
+    return flask.render_template('edit_product.html', product=current_product)
+
 
 
 

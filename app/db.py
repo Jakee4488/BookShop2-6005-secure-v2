@@ -7,7 +7,7 @@ conn = sqlite3.connect('database.db')
 cursor = conn.cursor()
 
 # Execute a DELETE command to remove a row
-delete_command = "DELETE FROM admin WHERE id = 1;"
+delete_command = "SELECT name FROM sqlite_master WHERE type='table'"
 cursor.execute(delete_command)
 
 # Commit the changes to the database

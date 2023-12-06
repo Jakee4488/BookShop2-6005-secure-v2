@@ -36,6 +36,14 @@ DATABASE = 'database.db'
 UPLOAD_FOLDER = r'C:\Users\jacob\Desktop\6005-working-file\BookShop2-6005-secure\app\uploads'
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+TABLE_SCHEMAS = {
+    "user": ["id", "email", "password"],
+    "seller":["id", "email", "password"],
+    "product":["id", "name", "description","price","image","seller_id"],
+    "review":["id", "userID", "productID","stars","review"],
+    "purchase":["id", "userID", "productID","date"],
+    "admin":["id", "email", "password"]
+}
 
 app = Flask(__name__)
 #
@@ -194,10 +202,10 @@ def generate_otp(length=6):
 def send_otp_email(receiver_email):
     # Generate OTP
     otp = generate_otp()
-
+    print(otp)
     # Email configuration (Gmail SMTP)
-    sender_email = 'danubebooks81@gmail.com'  # Replace with your Gmail email address
-    sender_password = 'qdol zmgu otlq pgdd'  # Replace with your Gmail password
+    sender_email = 'danubebooks7@gmail.com'  # Replace with your Gmail email address
+    sender_password = 'tbxz eutl dbxt efdj'  # Replace with your Gmail password
     smtp_server = 'smtp.gmail.com'
     smtp_port = 587
 
