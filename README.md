@@ -1,5 +1,3 @@
-Based on the gathered information, here is a draft for your README file:
-
 # Secure Bookshop Website
 
 ## Project Description
