@@ -2,7 +2,7 @@
 
 ## Project Description
 
-Welcome to the Secure Bookshop project! This repository contains the code for a bookshop website with Multi-Factor Authentication (MFA) implemented for enhanced security. The project is developed primarily using JavaScript, HTML, Python, and CSS.
+Welcome to the Secure Bookshop project! This repository contains the code for a bookshop website with Multi-Factor Authentication (MFA) implemented for enhanced security. The project is primarily developed using JavaScript, with additional components in HTML, Python, and CSS.
 
 ## Table of Contents
 - [Quickstart](#quickstart)
@@ -25,10 +25,9 @@ To set up the project locally, follow these steps:
    ```
 
 2. **Install dependencies:**
-   - **JavaScript dependencies:**
-     ```bash
-     npm install
-     ```
+   ```bash
+   npm install
+   ```
 
 3. **Run the project:**
    ```bash
@@ -44,17 +43,17 @@ To use the Secure Bookshop website:
 4. Register and log in to complete your purchase.
 
 ## Contributing
-First of all, thanks for your interest in helping make this project even better. Contributions help resolve rare bugs, accomplish neat new features, polish the code, and improve the documentation.
+Thank you for your interest in contributing to the project! Contributions help resolve rare bugs, add new features, polish the code, and improve the documentation.
 
-### Guidelines for contributing
-- Compare against the `development` branch when creating a pull request. This allows time to test and modify code changes before merging them into the stable master branch with the next release.
-- Travis CI is configured to build and verify all PRs. If your PR causes the build to fail, please add an additional commit that resolves any problems.
-- If you want to earn some brownie points, create a JSFiddle that demonstrates your code changes. Seriously, this helps immensely and allows one or multiple people to easily provide feedback on the great work you've done.
-- Do your best to fully test your changes. Anticipate edge-case behavior.
-- Try to keep your codebase that you're making changes to as up-to-date as possible with the origin. The project creates new releases frequently, so it's easy to fall behind if you've been working on something new for a while.
+### Guidelines for Contributing
+- Compare against the `development` branch when creating a pull request to allow time for testing and modification before merging into the stable master branch.
+- Ensure that Travis CI builds and verifies all pull requests. If your pull request causes the build to fail, please resolve any issues by adding additional commits.
+- Create a JSFiddle to demonstrate your code changes if possible, as this greatly helps with feedback.
+- Fully test your changes and anticipate edge-case behavior.
+- Keep your codebase up-to-date with the origin to avoid falling behind.
 
 ## Project Structure
-The key files and directories in this project are:
+Key files and directories in this project include:
 
 - **README.md:** This file.
 - **app/static/markdownEditor:** Contains the Markdown Editor files.
@@ -66,3 +65,5 @@ The key files and directories in this project are:
 This project is licensed under the MIT License.
 
 Feel free to let me know if you would like to add or modify any sections.
+
+You can update your `README.md` file with this improved version.
