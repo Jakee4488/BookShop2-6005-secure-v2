@@ -2,6 +2,7 @@
 
 ## Project Description
 
+
 Welcome to the Secure Bookshop project! This repository contains the code for a bookshop website with Multi-Factor Authentication (MFA) implemented for enhanced security. The project is primarily developed using JavaScript, with additional components in HTML, Python, and CSS.
 
 
